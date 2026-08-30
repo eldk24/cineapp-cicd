@@ -1,0 +1,99 @@
+name: CI/CD CineApp
+
+on:
+  push:
+    branches:
+      - main
+
+  pull_request:
+    branches:
+      - main
+
+jobs:
+
+  # ==========================
+  # 1. COMPILACIÓN
+  # ==========================
+  build:
+    name: Compilación
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Descargar código
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Instalar dependencias
+        run: npm install
+
+      - name: Compilar aplicación
+        run: npm run build
+
+
+  # ==========================
+  # 2. PRUEBAS
+  # ==========================
+  test:
+    name: Pruebas automatizadas
+    runs-on: ubuntu-latest
+
+    needs: build
+
+    steps:
+
+      - name: Descargar código
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Instalar dependencias
+        run: npm install
+
+      - name: Ejecutar pruebas
+        run: npm test
+
+
+  # ==========================
+  # 3. DOCKER
+  # ==========================
+  docker:
+    name: Construcción Docker
+    runs-on: ubuntu-latest
+
+    needs: test
+
+    steps:
+
+      - name: Descargar código
+        uses: actions/checkout@v4
+
+      - name: Construir imagen Docker
+        run: docker build -t cineapp:latest .
+
+
+  # ==========================
+  # 4. DESPLIEGUE
+  # ==========================
+  deploy:
+    name: Despliegue
+    runs-on: ubuntu-latest
+
+    needs: docker
+
+    steps:
+
+      - name: Simular despliegue
+        run: |
+          echo "================================="
+          echo "DESPLIEGUE DE CINEAPP"
+          echo "================================="
+          echo "Aplicación desplegada correctamente"
+          echo "================================="
