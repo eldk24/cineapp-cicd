@@ -1,0 +1,13 @@
+{
+  "name": "cineapp",
+  "version": "1.0.0",
+  "description": "Sistema de reservas de CineApp",
+  "main": "app.js",
+  "scripts": {
+    "build": "echo Compilacion exitosa",
+    "test": "jest"
+  },
+  "devDependencies": {
+    "jest": "^30.0.0"
+  }
+}
